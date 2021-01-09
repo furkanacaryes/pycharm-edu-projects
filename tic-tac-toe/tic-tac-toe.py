@@ -13,7 +13,7 @@ class TicTacToe:
     def switch_player(self):
         self.player = 'O' if self.player == 'X' else 'X'
 
-    def to_index(self) -> int:
+    def coords_to_index(self) -> int:
         [y, x] = self.coordinates  # vertical-first
         return (y - 1) * 3 + x - 1
 
@@ -25,23 +25,22 @@ class TicTacToe:
         user_coordinates = input("Enter the coordinates:")
         self.coordinates = str_to_int_list(user_coordinates)
         self.are_all_in_range()
-        return self.to_index()
+        return self.coords_to_index()
 
     def play(self):
         try:
             move = self.input_safely()
             self.board.update(move, self.player)
-            self.switch_player()
         except ValueError:
             print('You should enter numbers!')
         except AssertionError:
             print('Coordinates should be from 1 to 3!')
         except LookupError:
             print('This cell is occupied! Choose another one!')
+        else:
+            self.switch_player()
         finally:
-            if self.board.is_finished():
-                self.board.set_game_result()
-            else:
+            if not self.board.is_finished():
                 self.play()
 
 
