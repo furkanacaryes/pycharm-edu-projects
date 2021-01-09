@@ -18,7 +18,7 @@ class TicTacToe:
         return (y - 1) * 3 + x - 1
 
     def are_all_in_range(self):
-        if not assert_every(self.coordinates, lambda c: 0 < c <= 3):
+        if not assert_every(lambda c: 0 < c <= 3, self.coordinates):
             raise AssertionError
 
     def input_safely(self) -> int:

@@ -54,8 +54,8 @@ class Board:
                 return True
 
     def detect_impossible(self):
-        steps_x = len(filter_match(self.inline_board, 'X'))
-        steps_o = len(filter_match(self.inline_board, 'O'))
+        steps_x = len(filter_match('X', self.inline_board))
+        steps_o = len(filter_match('O', self.inline_board))
         diff = steps_x - steps_o
         positive_diff = diff if diff > 0 else diff * -1
 
