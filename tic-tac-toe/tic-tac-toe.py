@@ -29,11 +29,11 @@ class TicTacToe:
         self.are_all_in_range()
         return self.coords_to_index()
 
+    def does_combination_match(self, combination: list[int]) -> bool:
+        return assert_every(lambda position: self.board.inline_board[position] == self.player, combination)
+
     def did_player_win(self):
-        return assert_any(
-            lambda combination: filter_match(self.player, combination),
-            self.board.strike_combinations
-        )
+        return assert_any(self.does_combination_match, self.board.strike_combinations)
 
     def decide_who_wins(self):
         did_win = self.did_player_win()
@@ -42,6 +42,8 @@ class TicTacToe:
             self.game_result = f"🎉 '{self.player}' WON!"
         elif self.is_finished():
             self.game_result = "💥 Draw"
+        else:
+            print('still playing')
 
     def is_finished(self) -> bool:
         return self.game_result or self.turn == 9
