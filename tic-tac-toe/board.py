@@ -1,10 +1,8 @@
-from utils import print_row_list, list_to_str, filter_match
+from utils import print_row_list, list_to_str
 
 
 class Board:
     def __init__(self):
-        self.turn = 0
-        self.game_result: str = ''
         self.rows: list[str] = []
         self.inline_board: str = '_' * 9
         self.render()
@@ -43,48 +41,3 @@ class Board:
 
         print_row_list(self.rows)
         self.rows = []
-
-    def did_player_win(self, player: str):
-        for combination in self.strike_combinations:
-            strike = ''
-
-            for position in combination:
-                strike += self.inline_board[position]
-
-            if strike == player * 3:
-                return True
-
-    def decide_who_wins(self):
-        players = ['X', 'O']
-        winners = list(filter(lambda p: self.did_player_win(p), players))
-
-        if len(winners) > 0:
-            self.game_result = f"{winners[0]} wins"
-        elif self.is_finished():
-            self.game_result = "Draw"
-
-    def is_finished(self) -> bool:
-        return self.game_result or self.turn == 9
-
-    def is_free(self, target: int) -> bool:
-        return self.inline_board[target] == '_'
-
-    def make_move(self, target: int, player: str):
-        exploded = list(self.inline_board)
-        exploded[target] = player
-        self.inline_board = str().join(exploded)
-        self.turn += 1
-
-    def update(self, target: int, player: str):
-        if not self.is_free(target):
-            raise LookupError
-
-        self.make_move(target, player)
-
-        self.render()
-
-        if self.turn > 4:
-            self.decide_who_wins()
-
-            if self.is_finished():
-                print(self.game_result)

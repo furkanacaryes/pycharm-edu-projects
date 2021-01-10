@@ -1,9 +1,11 @@
 from board import Board
-from utils import assert_every, str_to_int_list
+from utils import assert_every, assert_any, filter_match, str_to_int_list
 
 
 class TicTacToe:
     def __init__(self):
+        self.turn = 0
+        self.game_result: str = ''
         self.board: Board = Board()
         self.play()
 
@@ -27,10 +29,50 @@ class TicTacToe:
         self.are_all_in_range()
         return self.coords_to_index()
 
+    def did_player_win(self):
+        return assert_any(
+            lambda combination: filter_match(self.player, combination),
+            self.board.strike_combinations
+        )
+
+    def decide_who_wins(self):
+        did_win = self.did_player_win()
+
+        if did_win:
+            self.game_result = f"🎉 '{self.player}' WON!"
+        elif self.is_finished():
+            self.game_result = "💥 Draw"
+
+    def is_finished(self) -> bool:
+        return self.game_result or self.turn == 9
+
+    def is_free(self, target: int) -> bool:
+        return self.board.inline_board[target] == '_'
+
+    def make_move(self, target: int):
+        exploded = list(self.board.inline_board)
+        exploded[target] = self.player
+        self.board.inline_board = str().join(exploded)
+        self.turn += 1
+
+    def update(self, target: int):
+        if not self.is_free(target):
+            raise LookupError
+
+        self.make_move(target)
+
+        self.board.render()
+
+        if self.turn > 4:
+            self.decide_who_wins()
+
+            if self.is_finished():
+                print(self.game_result)
+
     def play(self):
         try:
             move = self.input_safely()
-            self.board.update(move, self.player)
+            self.update(move)
         except ValueError:
             print('You should enter numbers!')
         except AssertionError:
@@ -40,7 +82,7 @@ class TicTacToe:
         else:
             self.switch_player()
         finally:
-            if not self.board.is_finished():
+            if not self.is_finished():
                 self.play()
 
 

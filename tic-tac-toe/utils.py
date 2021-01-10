@@ -14,8 +14,13 @@ def filter_match(match, collection: list) -> list:
 
 
 def assert_every(predictable, collection: list) -> bool:
-    """Asserts every item in given list by given prediction"""
+    """Asserts whether EVERY item in given list passes given prediction"""
     return all(list(map(predictable, collection)))
+
+
+def assert_any(predictable, collection: list) -> bool:
+    """Asserts whether ANY item in given list passes given prediction"""
+    return any(list(map(predictable, collection)))
 
 
 def print_row_list(rows):
