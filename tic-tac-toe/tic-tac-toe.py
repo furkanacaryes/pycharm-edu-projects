@@ -42,8 +42,6 @@ class TicTacToe:
             self.game_result = f"🎉 '{self.player}' WON!"
         elif self.is_finished():
             self.game_result = "💥 Draw"
-        else:
-            print('still playing')
 
     def is_finished(self) -> bool:
         return self.game_result or self.turn == 9
